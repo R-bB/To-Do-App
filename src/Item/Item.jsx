@@ -12,7 +12,10 @@ class Item extends Component{
 
     render(props){
         return(
-            <div>
+            <div className="item">
+                <span className="closebtn">
+                      &times;
+                </span>
                 <p className="itemContent">{ this.itemContent }</p>
             </div>
         )

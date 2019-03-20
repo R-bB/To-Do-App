@@ -38,7 +38,7 @@ class App extends Component {
 
     this.state = {
       items: [
-        { id: 1, itemContent: "test1"},
+        { id: 1, itemContent: "test1 is a longer set of characters"},
         { id: 2, itemContent: "test2"},
       ],
     }

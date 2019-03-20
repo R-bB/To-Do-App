@@ -25,6 +25,8 @@
   flex: 1 1 auto;
   position: relative;
   overflow-y: auto;
+  background-color: #444a55;
+  color: white;
 }
 
 .App-footer {
@@ -38,6 +40,13 @@
   color: white;
 }
 
+.itemWrapper {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  height: 100%;
+}
+
 .itemBody {
   padding-top: 24px;
   display: flex;
@@ -46,4 +55,19 @@
   align-items: flex-start;
   align-content: flex-start;
   overflow: auto;
+}
+
+.addItemBody {
+  padding:.4em .4em;
+  height: auto; 
+  margin: auto;
+  margin-bottom: .4em;
+  width: 90vw;
+  max-width: 600px;
+  font-size: 1.4em;
+  color: #222;
+  background-color: #eee; 
+  border-radius: 3px;
+  box-shadow: 3px 3px 2px #222;
+  opacity: 1;
 }
