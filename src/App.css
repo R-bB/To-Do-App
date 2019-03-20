@@ -37,3 +37,13 @@
   font-size: calc(10px + 2vmin);
   color: white;
 }
+
+.itemBody {
+  padding-top: 24px;
+  display: flex;
+  flex: 1 1 85%;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  align-content: flex-start;
+  overflow: auto;
+}

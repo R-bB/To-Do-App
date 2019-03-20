@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import firebase from 'firebase';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
+import Item from './Item/Item';
 
 const config = {
   apiKey: "AIzaSyBamdjooQEKP0OBoiTMme9EglbsiUTYawk",
@@ -32,6 +33,16 @@ class App extends Component {
     )
   }
 
+  constructor(props){
+    super(props);
+
+    this.state = {
+      items: [
+        { id: 1, itemContent: "test1"},
+        { id: 2, itemContent: "test2"},
+      ],
+    }
+  }
 
   render() {
     return (
@@ -42,23 +53,44 @@ class App extends Component {
       <div className="App-content">
       {this.state.isSignedIn ? (
           <span>
-            <div>Signed In!</div>
+            <h3>Your To-Do List</h3>
+            <div>
+              {
+                this.state.items.map((item) => {
+                  return (
+                    <Item itemContent={item.itemContent} itemId={item.id} key={item.id}/>
+                  )
+                })
+              }
+            </div>
+            <div className="addItemBody">
+              <p>Add Item</p><button>Add</button>
+            </div>
             <button onClick={() => firebase.auth().signOut()}>Sign out!</button>
-            <h3>Welcome {firebase.auth().currentUser.displayName}</h3>
           </span>
         ) : (
           <span>
-            <h3>Please sign in</h3>
             <StyledFirebaseAuth
               uiConfig={this.uiConfig}
               firebaseAuth={firebase.auth()}
             />
           </span>
+          
         )
       }</div>
-      <footer className="App-footer">
-        <p>footer</p>
-      </footer>
+      {this.state.isSignedIn ? (
+          <span>
+            <footer className="App-footer">
+            <p>{firebase.auth().currentUser.displayName} Signed In</p>
+            </footer>
+          </span>
+        ) : (
+          <span>
+            <footer className="App-footer">
+            <p>Not Signed In</p>
+            </footer>
+          </span>
+        )}
       </div>
     );
   }
