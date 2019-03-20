@@ -39,6 +39,7 @@ class App extends Component {
       <header className="App-header">
         <h1>To-Do</h1>
       </header>
+      <div className="App-content">
       {this.state.isSignedIn ? (
           <span>
             <div>Signed In!</div>
@@ -54,7 +55,10 @@ class App extends Component {
             />
           </span>
         )
-      }
+      }</div>
+      <footer className="App-footer">
+        <p>footer</p>
+      </footer>
       </div>
     );
   }
