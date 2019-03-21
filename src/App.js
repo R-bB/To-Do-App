@@ -1,15 +1,19 @@
 import React, { Component } from 'react';
 import './App.css';
 import firebase from 'firebase';
+import 'firebase/database';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import Item from './Item/Item';
 import AddItem from './AddItem/AddItem';
+import { config } from './Config/config';
 
-const config = {
-  apiKey: "AIzaSyBamdjooQEKP0OBoiTMme9EglbsiUTYawk",
-  authDomain: "to-do-app-684f2.firebaseapp.com",
+if (!firebase.apps.length) {
+  try {
+      firebase.initializeApp(config)
+  } catch (err) {
+      console.error('Firebase initialization error raised', err.stack)
+  }
 }
-firebase.initializeApp(config);
 
 class App extends Component {
   state = { isSignedIn: false }
@@ -29,31 +33,59 @@ class App extends Component {
   componentDidMount = () => {
     firebase.auth().onAuthStateChanged(user => {
       this.setState({ isSignedIn: !!user })
-      console.log("user", user)
-    }
-    )
-  }
+      const previousItems = this.state.items;
+      if (user){
+        
+        this.uid = firebase.auth().currentUser.uid;
+        //const previousItems = this.state.items;
+        this.db = firebase.database().ref('users/'+ this.uid).child('items');
 
+        this.db.on('child_added', snap => {
+          previousItems.push({
+            id: snap.key,
+            itemContent: snap.val().itemContent,
+          })
+
+          this.setState({
+            items: previousItems
+          })
+        })
+      }
+      
+    })
+    
+  }
+ 
   constructor(props){
     super(props);
     this.addItem = this.addItem.bind(this);
 
     this.state = {
-      items: [
-        { id: 1, itemContent: "test1 is a longer set of characters"},
-        { id: 2, itemContent: "test2"},
-      ],
+      items: [],
     }
   }
 
+  // componentWillMount(){
+  //   const previousItems = this.state.items;
+  //   this.db = firebase.database().ref('users/'+ this.uid).child('items');
+
+  //   this.db.on('child_added', snap => {
+  //     previousItems.push({
+  //       id: snap.key,
+  //       itemContent: snap.val().itemContent,
+  //     })
+
+  //     this.setState({
+  //       items: previousItems
+  //     })
+  //   })
+  // }
+
   addItem(item){
-    const previousItems = this.state.items;
-    previousItems.push({ id: previousItems.length + 1, itemContent: item});
-    this.setState({
-      items: previousItems
-    })
-    
+    this.db.push().set({ itemContent: item });
   }
+
+  
 
   render() {
     return (
@@ -92,7 +124,7 @@ class App extends Component {
       {this.state.isSignedIn ? (
           <span>
             <footer className="App-footer">
-            <p>{firebase.auth().currentUser.displayName} Signed In</p>
+            <p>Signed In</p>
             </footer>
           </span>
         ) : (
@@ -108,4 +140,3 @@ class App extends Component {
 }
 
 export default App;
-
