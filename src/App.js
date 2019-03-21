@@ -3,6 +3,7 @@ import './App.css';
 import firebase from 'firebase';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import Item from './Item/Item';
+import AddItem from './AddItem/AddItem';
 
 const config = {
   apiKey: "AIzaSyBamdjooQEKP0OBoiTMme9EglbsiUTYawk",
@@ -35,6 +36,7 @@ class App extends Component {
 
   constructor(props){
     super(props);
+    this.addItem = this.addItem.bind(this);
 
     this.state = {
       items: [
@@ -42,6 +44,15 @@ class App extends Component {
         { id: 2, itemContent: "test2"},
       ],
     }
+  }
+
+  addItem(item){
+    const previousItems = this.state.items;
+    previousItems.push({ id: previousItems.length + 1, itemContent: item});
+    this.setState({
+      items: previousItems
+    })
+    
   }
 
   render() {
@@ -63,8 +74,8 @@ class App extends Component {
                 })
               }
             </div>
-            <div className="addItemBody">
-              <p>Add Item</p><button>Add</button>
+            <div>
+              <AddItem addItem={this.addItem} />
             </div>
             <button onClick={() => firebase.auth().signOut()}>Sign out!</button>
           </span>
