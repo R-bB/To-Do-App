@@ -14,13 +14,11 @@ class AddItem extends Component{
     handleUserInput(e){
         this.setState({
             newItemContent: e.target.value,
-        })
+            })
     }
 
     writeItem(){
-
         this.props.addItem(this.state.newItemContent);
-
         this.setState({
             newItemContent: '',
         })

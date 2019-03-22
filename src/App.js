@@ -30,14 +30,16 @@ class App extends Component {
     }
   }
 
-  componentDidMount = () => {
+  constructor(props){
+    super(props);
+    this.addItem = this.addItem.bind(this);
+    this.removeItem = this.removeItem.bind(this);
     firebase.auth().onAuthStateChanged(user => {
       this.setState({ isSignedIn: !!user })
-      const previousItems = this.state.items;
       if (user){
         
         this.uid = firebase.auth().currentUser.uid;
-        //const previousItems = this.state.items;
+        const previousItems = this.state.items;
         this.db = firebase.database().ref('users/'+ this.uid).child('items');
 
         this.db.on('child_added', snap => {
@@ -50,42 +52,35 @@ class App extends Component {
             items: previousItems
           })
         })
-      }
-      
-    })
-    
+
+        this.db.on('child_removed', snap => {
+          for(var i=0; i < previousItems.length; i++){
+            if(previousItems[i].id === snap.key){
+              previousItems.splice(i, 1);
+            }
+          }
+
+          this.setState({
+            items: previousItems
+          })
+
+        })
+        }
+      })
+
+      this.state = {
+        items: [],
+
+    }    
   }
- 
-  constructor(props){
-    super(props);
-    this.addItem = this.addItem.bind(this);
-
-    this.state = {
-      items: [],
-    }
-  }
-
-  // componentWillMount(){
-  //   const previousItems = this.state.items;
-  //   this.db = firebase.database().ref('users/'+ this.uid).child('items');
-
-  //   this.db.on('child_added', snap => {
-  //     previousItems.push({
-  //       id: snap.key,
-  //       itemContent: snap.val().itemContent,
-  //     })
-
-  //     this.setState({
-  //       items: previousItems
-  //     })
-  //   })
-  // }
 
   addItem(item){
     this.db.push().set({ itemContent: item });
   }
 
-  
+  removeItem(itemId){
+    this.db.child(itemId).remove();
+  }
 
   render() {
     return (
@@ -96,12 +91,15 @@ class App extends Component {
       <div className="App-content">
       {this.state.isSignedIn ? (
           <span>
-            <h3>Your To-Do List</h3>
+            <br/>
             <div>
               {
                 this.state.items.map((item) => {
                   return (
-                    <Item itemContent={item.itemContent} itemId={item.id} key={item.id}/>
+                    <Item itemContent={item.itemContent} 
+                    itemId={item.id} 
+                    key={item.id}
+                    removeItem={this.removeItem}/>
                   )
                 })
               }
@@ -109,7 +107,7 @@ class App extends Component {
             <div>
               <AddItem addItem={this.addItem} />
             </div>
-            <button onClick={() => firebase.auth().signOut()}>Sign out!</button>
+            <button className="signOutButton" onClick={() => firebase.auth().signOut()}>Sign out!</button>
           </span>
         ) : (
           <span>
