@@ -92,7 +92,7 @@ class App extends Component {
       {this.state.isSignedIn ? (
           <span>
             <br/>
-            <div>
+            <div >
               {
                 this.state.items.map((item) => {
                   return (
@@ -122,7 +122,7 @@ class App extends Component {
       {this.state.isSignedIn ? (
           <span>
             <footer className="App-footer">
-            <p>Signed In</p>
+            <p>Signed In {firebase.auth().currentUser.displayName}</p>
             </footer>
           </span>
         ) : (
