@@ -26,14 +26,14 @@ class AddItem extends Component{
 
     render(){
         return(
-            <div className="formWrapper">
+            <form className="formWrapper">
                 <input className="itemInput" 
                 placeholder="Add an item!"
                 value={this.state.newItemContent}
                 onChange={this.handleUserInput} />
                 <button className="itemButton"
                 onClick={this.writeItem}>Add</button>
-            </div>
+            </form>
         )
     }
 

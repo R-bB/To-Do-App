@@ -28,14 +28,19 @@ class App extends Component {
     callbacks: {
       signInSuccessWithAuthResult: () => false
     }
+
   }
 
   constructor(props){
     super(props);
     this.addItem = this.addItem.bind(this);
     this.removeItem = this.removeItem.bind(this);
+    this.state = {
+      items: [],
+    };
     firebase.auth().onAuthStateChanged(user => {
       this.setState({ isSignedIn: !!user })
+    
       if (user){
         
         this.uid = firebase.auth().currentUser.uid;
@@ -49,7 +54,7 @@ class App extends Component {
           })
 
           this.setState({
-            items: previousItems
+            items: previousItems,
           })
         })
 
@@ -61,17 +66,14 @@ class App extends Component {
           }
 
           this.setState({
-            items: previousItems
+            items: previousItems,
           })
-
+          console.log(this.state.previousItems);
         })
         }
       })
 
-      this.state = {
-        items: [],
-
-    }    
+        
   }
 
   addItem(item){
@@ -90,9 +92,9 @@ class App extends Component {
       </header>
       <div className="App-content">
       {this.state.isSignedIn ? (
-          <span>
+          <div>
             <br/>
-            <div >
+          <span>
               {
                 this.state.items.map((item) => {
                   return (
@@ -103,12 +105,12 @@ class App extends Component {
                   )
                 })
               }
-            </div>
             <div>
               <AddItem addItem={this.addItem} />
             </div>
             <button className="signOutButton" onClick={() => firebase.auth().signOut()}>Sign out!</button>
           </span>
+          </div>
         ) : (
           <span>
             <StyledFirebaseAuth

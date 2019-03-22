@@ -15,7 +15,7 @@ class Item extends Component{
         this.props.removeItem(id);
     }
 
-    render(props){
+    render(){
         return(
             <div className="item">
                 <span className="closebtn" 
@@ -30,7 +30,7 @@ class Item extends Component{
 }
 
 Item.propTypes ={
-    itemContent: PropTypes.string
+    itemContent: PropTypes.string,
 }
 
 export default Item;
