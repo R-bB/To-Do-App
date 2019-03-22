@@ -7,6 +7,7 @@ import Item from './Item/Item';
 import AddItem from './AddItem/AddItem';
 import { config } from './Config/config';
 
+// If firebase app is not already initilized, then initialize it
 if (!firebase.apps.length) {
   try {
       firebase.initializeApp(config)
@@ -16,6 +17,7 @@ if (!firebase.apps.length) {
 }
 
 class App extends Component {
+  
   state = { isSignedIn: false }
   uiConfig = {
     signInFlow: "popup",
@@ -38,9 +40,14 @@ class App extends Component {
     this.state = {
       items: [],
     };
+  }
+    
+  componentDidMount(){ 
     firebase.auth().onAuthStateChanged(user => {
       this.setState({ isSignedIn: !!user })
-    
+      this.state = {
+        items: [],
+      };
       if (user){
         
         this.uid = firebase.auth().currentUser.uid;
@@ -72,8 +79,6 @@ class App extends Component {
         })
         }
       })
-
-        
   }
 
   addItem(item){
