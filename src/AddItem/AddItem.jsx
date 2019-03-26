@@ -47,7 +47,7 @@ class AddItem extends Component{
         const isDisabled = Object.keys(errors).some(x => errors[x]);
         return(
             <form className="formWrapper">
-            <div class='addItem'>
+            <div className='addItem'>
                 <input className="itemInput" 
                 placeholder="To-Do!"
                 value={this.state.newItemContent}
