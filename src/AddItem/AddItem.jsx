@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './AddItem.css';
 
-
+//Make sure the input box is not an empty string
 function validate(newItemContent) {
     return {
         newItemContent: newItemContent.length === 0,
@@ -25,6 +25,7 @@ class AddItem extends Component{
     }
 
     writeItem(e){
+        //If the input box is empty do not allow it to be added to the list
         if (!this.canBeSubmitted()) {
             e.preventDefault();
             return;
@@ -32,7 +33,7 @@ class AddItem extends Component{
         this.props.addItem(this.state.newItemContent);
         this.setState({
             newItemContent: '',
-        })
+        });
         e.preventDefault();
     }
 
@@ -49,7 +50,7 @@ class AddItem extends Component{
             <form className="formWrapper">
             <div className='addItem'>
                 <input className="itemInput" 
-                placeholder="To-Do!"
+                placeholder="To-Do..."
                 value={this.state.newItemContent}
                 onChange={this.handleUserInput} />
                 <button disabled={isDisabled} className="itemButton"

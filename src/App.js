@@ -30,7 +30,6 @@ class App extends Component {
     callbacks: {
       signInSuccessWithAuthResult: () => false
     }
-
   }
 
   constructor(props){
@@ -56,6 +55,7 @@ class App extends Component {
           previousItems.push({
             id: snap.key,
             itemContent: snap.val().itemContent,
+            complete: false
           })
 
           this.setState({
@@ -73,14 +73,15 @@ class App extends Component {
           this.setState({
             items: previousItems,
           })
-          console.log(this.state.previousItems);
         })
         }
       })
   }
 
   addItem(item){
-    this.db.push().set({ itemContent: item });
+    this.db.push().set({ 
+      itemContent: item,
+    });
   }
 
   removeItem(itemId){
@@ -104,12 +105,14 @@ class App extends Component {
                     <Item itemContent={item.itemContent} 
                     itemId={item.id} 
                     key={item.id}
-                    removeItem={this.removeItem}/>
+                    removeItem={this.removeItem}
+                    />
                   )
                 })
               }
             <div>
               <AddItem addItem={this.addItem} />
+              {JSON.stringify(this.state.items)}
             </div>
             <button className="signOutButton" onClick={() => firebase.auth().signOut()}>Sign out!</button>
           </span>
@@ -121,7 +124,6 @@ class App extends Component {
               firebaseAuth={firebase.auth()}
             />
           </span>
-          
         )
       }</div>
       {this.state.isSignedIn ? (
